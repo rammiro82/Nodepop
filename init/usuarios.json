@@ -1,0 +1,9 @@
+// usuarios.json
+{
+  "usuarios": [{
+    "nombre": "ramiro",
+    "email": "rammiro82@gmail.com",
+    "clave": "ramiro"
+  }
+  ]
+}
