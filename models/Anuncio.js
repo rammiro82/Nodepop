@@ -17,7 +17,7 @@ anuncioSchema.statics.lista = function( criterios, callback) {
     // uso .find sin callback para que me de un objeto query sin ejecutar
     var query = Anuncio.find(criterios);
 
-    query.sort('name');
+    query.sort('nombre');
 
     query.exec( function(err, rows) {
         if (err) {
