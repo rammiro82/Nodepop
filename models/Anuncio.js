@@ -8,8 +8,11 @@ var anuncioSchema = mongoose.Schema({
     venta: Boolean,
     precio: Number,
     foto: String,
-    tags: [String]
+    tags: [String],
+    dateCreated    : { type: Date, default: Date.now }
 });
+
+anuncioSchema.index({'nombre':1});
 
 // metodo estático que devuelve una lista de la BD
 anuncioSchema.statics.lista = function( criterios, callback) {

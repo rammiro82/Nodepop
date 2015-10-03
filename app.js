@@ -27,8 +27,8 @@ require('./models/Anuncio');
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
-app.use('/usuario', require('./routes/usuarios'));
-app.use('/anuncios', require('./routes/anuncio'));
+app.use('/usuarios', require('./routes/usuarios'));
+app.use('/anuncios', require('./routes/anuncios'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

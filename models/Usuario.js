@@ -6,8 +6,14 @@ var mongoose = require('mongoose');
 var usuarioSchema = mongoose.Schema({
     nombre: String,
     email: String,
-    clave: String
+    clave: String,
+    token: String,
+    userAgent: String,
+    dateCreated: { type: Date, default: Date.now }
 });
+
+usuarioSchema.index({'email':1},{ unique: true });
+usuarioSchema.index({'token':1});
 
 // metodo estático que devuelve una lista de la BD
 usuarioSchema.statics.lista = function( criterios, callback) {

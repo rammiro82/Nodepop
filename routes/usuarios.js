@@ -21,6 +21,7 @@ router.get('/', function (req, res) {
 
 });
 
+
 router.get('/:nombre', function (req, res) {
 
     var nombre_ = req.params.nombre;
@@ -40,8 +41,8 @@ router.get('/:nombre', function (req, res) {
 });
 
 
-/* POST /apiV1/usuarios */
-router.post('/', function(req, res) {
+/* POST */
+router.post('/authenticate', function(req, res) {
     // crear un registro de usuario
     var nuevo = req.body;
 
@@ -58,5 +59,6 @@ router.post('/', function(req, res) {
         res.json({success: true, usuario: creado});
     });
 });
+
 
 module.exports = router;
