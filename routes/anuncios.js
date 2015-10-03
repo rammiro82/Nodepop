@@ -34,7 +34,7 @@ router.post('/', function(req, res, next) {
 
     anuncio.save( function(err, creado) {
         if (err) {
-            console.log(err);
+            console.log(i18nVar.__("ADS_POST_KO_") + err);
             return res.json({ok:false, error: err});
         }
 

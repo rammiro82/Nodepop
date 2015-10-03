@@ -5,6 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
+var i18n = new (require('i18n-2'))({
+    // setup some locales - other locales default to the first locale
+    locales: ['es', 'en']
+});
+// definimos de manera global la variable i18n, para poder utiliarla en cualquier lugar.
+global.i18nVar = i18n;
 //var initDB = require('./init/install_bd');
 
 var app = express();
@@ -60,6 +67,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
