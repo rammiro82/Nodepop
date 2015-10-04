@@ -120,20 +120,20 @@ router.get('/', function(req, res) {
     }
 
     if(limit){
-        if(isNaN(start)){
-            return res.json({success:false, msg:i18nVar.__("ADS_GET_PARAM_NO_VALIDO", 'start')});
+        if(isNaN(limit)){
+            return res.json({success:false, msg:i18nVar.__("ADS_GET_PARAM_NO_VALIDO", 'limit')});
         }
     }
 
     if(sort){
-        if(sort.toString().toLowerCase().indexOf(['nombre','precio','venta','tag']) == -1){
-            return res.json({success:false, msg:i18nVar.__("ADS_GET_PARAM_NO_VALIDO_ARRAY", 'sort', ['nombre','precio','venta','tag'])});
+        if( ['nombre','precio','venta','tag','-nombre','-precio','-venta','-tag'].indexOf(sort.toString().toLowerCase()) < 0){
+            return res.json({success:false, msg:i18nVar.__("ADS_GET_PARAM_NO_VALIDO_ARRAY", 'sort', ['nombre','precio','venta','tag','-nombre','-precio','-venta','-tag'])});
         }
     }
 
 
 
-    Anuncio.lista(criterios, start, function(err, lista) {
+    Anuncio.lista(criterios, start, limit, sort, function(err, lista) {
         if (err) {
             console.log(err);
             return res.json({ok:false, error: err});
