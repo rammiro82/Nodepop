@@ -2,11 +2,21 @@
 
 var express = require('express');
 var router = express.Router();
-
-// Alternativa
+var sha256 = require('sha256');
+var validator = require('validator');
 var mongoose = require('mongoose');
 var Usuario = mongoose.model('Usuario');
 
+/**
+ * @api {get} /user/:id Request User information
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiParam {Number} id Users unique ID.
+ *
+ * @apiSuccess {String} firstname Firstname of the User.
+ * @apiSuccess {String} lastname  Lastname of the User.
+ */
 router.get('/', function (req, res) {
 
     Usuario.lista({}, function(err,lista){
@@ -22,39 +32,46 @@ router.get('/', function (req, res) {
 });
 
 
-router.get('/:nombre', function (req, res) {
+/* POST */
+router.post('/authenticate', function(req, res, next) {
 
-    var nombre_ = req.params.nombre;
+    var auxNom = req.body.nombre;
+    var auxEmail = req.body.email;
+    var auxClave = req.body.clave;
 
-    var usuario = new Usuario({nombre:nombre_});
+    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
 
-    usuario.get(nombre_, function (err, data) {
-        if(err){
-            console.log(err);
-            return res.json({status:false, error:err});
+    console.log('usuarios.js - Nombre: ', auxNom);
+    console.log('usuarios.js - E-Mail: ', auxEmail);
+    console.log('usuarios.js - Password: ', auxClave, ' - ', sha256(auxClave));
 
-        }
-        console.log(data);
-        return res.json({status:true, data:data});
+    if(!auxEmail){
+        return res.json({success:false, msg:i18nVar.__("USR_POST_AUTH_KO_EMAIL_VACIO")});
+    }
+    if(!auxClave){
+        return res.json({success:false, msg:i18nVar.__("USR_POST_AUTH_KO_CLAVE_VACIO")});
+    }
+    if(!validator.isEmail(auxEmail)){
+        return res.json({success:false, msg:i18nVar.__("USR_POST_AUTH_KO_EMAIL_INCORRECTO")});
+    }
+
+    // Se crea un nuevo usuario
+    var usuario = new Usuario({
+        nombre: auxNom,
+        email:  auxEmail,
+        clave:  sha256(auxClave)
     });
 
-});
-
-
-/* POST */
-router.post('/authenticate', function(req, res) {
-    // crear un registro de usuario
-    var nuevo = req.body;
-
-    // creamos un registro usuario
-    var usuario = new Usuario(nuevo); //{nombre: 'nomUsuario', email: 'correo@eletronico.es', clave: 'contraseña'}
-
     usuario.save(function (err, creado) {
+        console.log('Dentro de save');
         if(err){
-            console.log(err);
-            // Al ser una api no debemos hacer next ya que el error envia un contenido web, deberiamos enviar un json
-            return res.json({success:false, error:err});
+            console.log(i18nVar.__("USR_POST_AUTH_KO") + err);
+            if(err.code === 11000) {// usuario duplicado
+                return res.json({success:false, msg:i18nVar.__("USR_POST_AUTH_KO_DUPLICADO")});
+            }
+            return res.json({success:false, error:i18nVar.__("USR_POST_AUTH_KO")});
         }
+        console.log('sin error');
         //devolver una confirmación
         res.json({success: true, usuario: creado});
     });
