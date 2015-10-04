@@ -12,23 +12,8 @@ var pushTokenSchema = mongoose.Schema({
     usuario: String
 });
 
-// metodo estático que devuelve una lista de la BD
-pushTokenSchema.statics.lista = function( criterios, callback) {
 
-    // uso .find sin callback para que me de un objeto query sin ejecutar
-    var query = PushToken.find(criterios);
-
-    query.sort('name');
-
-    query.exec( function(err, rows) {
-        if (err) {
-            return callback(err);
-        }
-
-        return callback(null, rows);
-
-    });
-};
+pushTokenSchema.index({'token':1});
 
 // exportar
 var PushToken = mongoose.model('PushToken', pushTokenSchema);

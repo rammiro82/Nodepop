@@ -39,7 +39,8 @@ app.use('/users', require('./routes/users'));
 
 app.use('/apiv1/usuarios', require('./routes/apiv1/usuarios'));
 app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
-app.use('/apiv1', require('./routes/apiv1/authenticate'));
+app.use('/apiv1/tokens',   require('./routes/apiv1/tokens'));
+app.use('/apiv1',          require('./routes/apiv1/authenticate'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
