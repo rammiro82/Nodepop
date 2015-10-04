@@ -32,11 +32,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('./lib/moongoseConnection');
 require('./models/Usuario');
 require('./models/Anuncio');
+require('./models/PushToken');
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
-app.use('/usuarios', require('./routes/usuarios'));
-app.use('/anuncios', require('./routes/anuncios'));
+
+app.use('/apiv1/usuarios', require('./routes/apiv1/usuarios'));
+app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
+app.use('/apiv1', require('./routes/apiv1/authenticate'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

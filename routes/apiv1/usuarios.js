@@ -7,9 +7,6 @@ var validator = require('validator');
 var mongoose = require('mongoose');
 var Usuario = mongoose.model('Usuario');
 
-var jwt = require('jsonwebtoken');
-var config = require('./../lib/local_config');
-
 /**
  * @api {get} /user/:id Request User information
  * @apiName GetUser
@@ -78,68 +75,5 @@ router.post('/registrar', function (req, res, next) {
         res.json({success: true, usuario: creado});
     });
 });
-
-
-router.post('/authenticate', function (req, res, next) {
-
-    var auxEmail = req.body.email;
-    var auxClave = sha256(req.body.clave);
-
-    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
-
-    console.log('Datos de login de Usuario:' +
-        '\n\temail:   %s' +
-        '\n\tclave sha: %s', auxEmail, sha256(auxClave));
-
-    if (!auxEmail) {
-        return res.json({success: false, msg: i18nVar.__("USR_POST_AUTH_KO_EMAIL_VACIO")});
-    }
-    if (!auxClave) {
-        return res.json({success: false, msg: i18nVar.__("USR_POST_AUTH_KO_CLAVE_VACIO")});
-    }
-    if (!validator.isEmail(auxEmail)) {
-        return res.json({success: false, msg: i18nVar.__("USR_POST_AUTH_KO_EMAIL_INCORRECTO")});
-    }
-
-    var criterios = {
-        email: auxEmail,
-        clave: auxClave
-    };
-
-    // find the user
-    Usuario.findOne({email: auxEmail}, function (err, user) {
-        if (err) {
-            return res.status(500).json({ok: false, error: {code: 500, message: err.message}});
-        }
-        if (!user) {
-            return res.json({ok: false, error: {code: 401, message: 'Authentication failed. User not found.'}});
-        } else if (user) {
-
-            // check if password matches
-            if (user.password != req.body.pass) {
-                res.json({ok: false, error: {code: 401, message: 'Authentication failed. Wrong password.'}});
-            } else {
-
-                // if user is found and password is right
-                // create a token
-                var token = jwt.sign(user, config.jwt.secret, {
-                    expiresInMinutes: config.jwt.expiresInMinutes
-                });
-
-                // return the information including token as JSON
-                res.json({
-                    ok: true,
-                    message: 'Enjoy your token!',
-                    token: token
-                });
-
-
-            }
-
-        }
-
-    });
-});
-
 
 module.exports = router;
