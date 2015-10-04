@@ -29,6 +29,9 @@ db.once('open', function() {
 
 });
 
+/**
+ *
+ */
 function runInstallScript() {
 
     console.log("iniciamos");
@@ -47,6 +50,10 @@ function runInstallScript() {
 
 }
 
+/**
+ *
+ * @param cb
+ */
 function initAnuncios(cb) {
 
     console.log("iniciamos anuncios");

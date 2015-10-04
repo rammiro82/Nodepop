@@ -1,3 +1,5 @@
 {
-    "DB_CONN_OK": "Conection to DDBB OK."
+	"DB_CONN_OK": "Conection to DDBB OK.",
+	"USR_POST_AUTH_KO": "USR_POST_AUTH_KO",
+	"USR_POST_AUTH_KO_DUPLICADO": "USR_POST_AUTH_KO_DUPLICADO"
 }

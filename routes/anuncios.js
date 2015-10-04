@@ -27,22 +27,18 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res, next) {
 
-    var nuevo = req.body;
-
     // crear un registro de agente
-    var anuncio = new Anuncio(nuevo); // {name:'Nuevo', age: 18}
+    var anuncio = new Anuncio(req.body); // {name:'Nuevo', age: 18}
 
     anuncio.save( function(err, creado) {
         if (err) {
-            console.log(i18nVar.__("ADS_POST_KO_") + err);
+            console.log(i18nVar.__("ADS_POST_KO") + err);
             return res.json({ok:false, error: err});
         }
 
         // devolver una confirmación
         res.json({ok:true, anuncio: creado});
-
     });
-
 });
 
 module.exports = router;
