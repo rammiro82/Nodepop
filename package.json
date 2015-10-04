@@ -8,8 +8,8 @@
     "initDB": "node init/install_bd.js"
   },
   "apidoc": {
-    "title": "Custom apiDoc browser title",
-    "url": "https://api.github.com/v1"
+    "title": "Nodepop - RESTfull web API",
+    "url": "https://localhost:3000/apiv1"
   },
   "dependencies": {
     "async": "^1.4.2",
