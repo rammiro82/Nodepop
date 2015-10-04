@@ -34,6 +34,22 @@ anuncioSchema.statics.lista = function( criterios, start, limit, sort, callback)
     });
 };
 
+// metodo estático que devuelve una lista de tags la BD
+anuncioSchema.statics.getTags = function( callback) {
+
+    // uso .find sin callback para que me de un objeto query sin ejecutar
+    var query = Anuncio.find().distinct('tags');
+
+    query.exec( function(err, rows) {
+        if (err) {
+            return callback(err);
+        }
+
+        return callback(null, rows);
+
+    });
+};
+
 // exportar
 var Anuncio = mongoose.model('Anuncio', anuncioSchema);
 

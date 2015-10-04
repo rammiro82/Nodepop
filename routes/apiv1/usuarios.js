@@ -38,13 +38,14 @@ router.post('/registrar', function (req, res, next) {
     var auxNom = req.body.nombre;
     var auxEmail = req.body.email;
     var auxClave = req.body.clave;
+    var auxClaveSha = sha256(auxClave);
 
     i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
 
     console.log('Datos de Usuario:' +
         '\n\tNombre:   %s' +
-        '\n\tE-Mail:   %s' +
-        '\n\tPassword: %s', auxNom, auxEmail, sha256(auxClave));
+        '\n\temail:   %s' +
+        '\n\tclave sha: %s', auxNom, auxEmail, auxClaveSha);
 
     if (!auxEmail) {
         return res.json({success: false, msg: i18nVar.__("USR_POST_AUTH_KO_EMAIL_VACIO")});
@@ -60,7 +61,7 @@ router.post('/registrar', function (req, res, next) {
     var usuario = new Usuario({
         nombre: auxNom,
         email: auxEmail,
-        clave: sha256(auxClave)
+        clave: auxClaveSha
     });
 
     usuario.save(function (err, creado) {

@@ -11,6 +11,8 @@ router.use(jwtAuth());
 
 // devuelve una lista de anuncios en JSON
 router.get('/', function(req, res) {
+
+    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
 /**
  anuncios?​
  tag​=mobile&
@@ -147,6 +149,20 @@ router.get('/', function(req, res) {
 
     });
 
+});
+
+router.get('/tags', function(req, res, next){
+    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+
+    Anuncio.getTags(function(err, lista){
+        if (err) {
+            console.log(err);
+            return res.json({ok:false, error: err});
+        }
+
+        res.json({ok:true, total:lista.length, data: lista});
+
+    });
 });
 
 router.post('/', function(req, res, next) {
