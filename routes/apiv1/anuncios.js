@@ -10,6 +10,11 @@ var jwtAuth = require('../../lib/jwtAuth');
 router.use(jwtAuth());
 
 // devuelve una lista de anuncios en JSON
+/**
+ * @api {get} /anuncios Lista los anuncios según los parámetros del filtro.
+ * @apiName GetAnuncios
+ * @apiGroup Anuncios
+ */
 router.get('/', function(req, res) {
 
     i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
@@ -151,6 +156,11 @@ router.get('/', function(req, res) {
 
 });
 
+/**
+ * @api {get} /anuncios/tags Lista los tags que hay.
+ * @apiName GetTags
+ * @apiGroup Anuncios
+ */
 router.get('/tags', function(req, res, next){
     i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
 
@@ -165,6 +175,11 @@ router.get('/tags', function(req, res, next){
     });
 });
 
+/**
+ * @api {post} /anuncios Crea un anuncio.
+ * @apiName PostAnuncios
+ * @apiGroup Anuncios
+ */
 router.post('/', function(req, res, next) {
 
     // crear un registro de agente

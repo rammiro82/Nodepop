@@ -32,7 +32,11 @@ router.get('/', function (req, res) {
 });
  */
 
-/* POST */
+/**
+ * @api {post} /usuarios/registrar Da de alta un usuario.
+ * @apiName PostUsuario
+ * @apiGroup Usuarios
+ */
 router.post('/registrar', function (req, res, next) {
 
     var auxNom = req.body.nombre;

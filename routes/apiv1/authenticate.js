@@ -10,7 +10,11 @@ var jwt = require('jsonwebtoken');
 var config = require('./../../lib/local_config');
 var sha256 = require('sha256');
 var validator = require('validator');
-
+/**
+ * @api {post} /authenticate Valida los datos de usuario a registrar.
+ * @apiName PostAuthenticate
+ * @apiGroup Authentication
+ */
 router.post('/authenticate', function (req, res) {
 
     i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
