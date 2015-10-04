@@ -12,3 +12,9 @@ npm start
 ```
 npm run dev
 ```
+
+## Inicializar la BBDD
+
+```
+npm run initDB
+```
