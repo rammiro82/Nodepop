@@ -5,8 +5,8 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('Nodepop:server');
-var http = require('http');
+var debug = require('debug')('NodepopSSL:server');
+var http = require('https');
 
 /**
  * Get port from environment and store in Express.
@@ -46,12 +46,17 @@ if (cluster.isMaster) {
     //console.log(cluster.workers);
 }else {
 
+    var fs = require('fs');
+    var options = {
+        key: fs.readFileSync('certificados/host.key'),
+        cert: fs.readFileSync('certificados/host.cert')
+    };
 
     /**
      * Create HTTP server.
      */
 
-    var server = http.createServer(app);
+    var server = http.createServer(options, app);
 
     /**
      * Listen on provided port, on all network interfaces.
