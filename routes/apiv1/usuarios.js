@@ -7,7 +7,7 @@ var validator = require('validator');
 var mongoose = require('mongoose');
 var Usuario = mongoose.model('Usuario');
 
-/**
+/*
  * @api {get} /user/:id Request User information
  * @apiName GetUser
  * @apiGroup User
@@ -16,7 +16,7 @@ var Usuario = mongoose.model('Usuario');
  *
  * @apiSuccess {String} firstname Firstname of the User.
  * @apiSuccess {String} lastname  Lastname of the User.
- */
+
 router.get('/', function (req, res) {
 
     Usuario.lista({}, function (err, lista) {
@@ -30,7 +30,7 @@ router.get('/', function (req, res) {
     });
 
 });
-
+ */
 
 /* POST */
 router.post('/registrar', function (req, res, next) {
