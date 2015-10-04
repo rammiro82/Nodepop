@@ -5,7 +5,6 @@ var readLine = require('readline');
 var async = require('async');
 var fs = require('fs');
 var path = require('path');
-var sha256 = require('sha256');
 
 var db = mongoose.connection;
 
@@ -17,7 +16,7 @@ db.once('open', function() {
         input: process.stdin,
         output: process.stdout
     });
-    rl.question('Are you sure you want to empty DB? (no)', function(answer) {
+    rl.question('Are you sure you want to empty DB? (no) ', function(answer) {
         rl.close();
         if (answer.toLowerCase() === 'yes') {
             runInstallScript();
@@ -34,10 +33,10 @@ db.once('open', function() {
  */
 function runInstallScript() {
 
-    console.log("iniciamos");
+    console.log("iniciamos script de inicialización de la BBDD");
 
     async.series([
-        initAnuncios//,initUsuarios
+            initAnuncios,initUsuarios
     ], function (err, results){
 
             if (err) {
@@ -56,7 +55,7 @@ function runInstallScript() {
  */
 function initAnuncios(cb) {
 
-    console.log("iniciamos anuncios");
+    console.log("iniciamos initAnuncios");
 
     var Anuncio = require('./../models/Anuncio');
 
@@ -77,17 +76,17 @@ function initAnuncios(cb) {
             // convertir su contenido (JSON) en objeto
             var anunciosObjArray = JSON.parse(data);
 
-            anunciosObjArray.anuncios.forEach(function(anuncioAux){
+            anunciosObjArray.anuncios.forEach((anuncioAux)=>{
                 // usamos el objeto
-                var anuncio = new Anuncio(anuncioAux);
+                let anuncio = new Anuncio(anuncioAux);
 
                 anuncio.save(function(err){
                     if (err) {
-                        console.error('Error en el guardado del objeto:  ', err);
+                        console.error('Error guardando Anuncio en initDB:  ', err);
                         return cb(err);
                     }
 
-                    console.log(anuncio);
+                    console.log('Guardado en la BBDD: ' + anuncio);
                 });
             });
 
@@ -98,11 +97,27 @@ function initAnuncios(cb) {
 }
 
 function initUsuarios(cb) {
-    var Usuario = mongoose.model('Usuario');
+
+    console.log("iniciamos initUsuarios");
+
+
+    var Usuario = require('./../models/Usuario');
 
     // elimino todos
     Usuario.remove({}, function(err, data) {
+        var user = new Usuario({
+            'nombre': 'Ramiro',
+            'email': 'rammiro82@gmail.com',
+            'clave': 'ramiro'
+        });
 
+        user.save(function(err, data){
+            if(err){
+                console.log('Error guardando Usuario en initDB: ', err);
+                return cb(err);
+            }
+            return cb(null, data);
+        });
 
     });
 }
