@@ -1,0 +1,1 @@
+{  "title": "Nodepop - RESTfull web API",  "url": "https://localhost:3000/apiv1",  "name": "PracticaNodeJS",  "version": "0.1.0",  "description": "",  "sampleUrl": false,  "apidoc": "0.2.0",  "generator": {    "name": "apidoc",    "time": "2015-10-04T14:40:36.378Z",    "url": "http://apidocjs.com",    "version": "0.13.1"  }}
