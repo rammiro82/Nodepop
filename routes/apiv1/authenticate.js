@@ -10,14 +10,54 @@ var jwt = require('jsonwebtoken');
 var config = require('./../../lib/local_config');
 var sha256 = require('sha256');
 var validator = require('validator');
+
+
 /**
- * @api {post} /authenticate Valida los datos de usuario a registrar.
- * @apiName PostAuthenticate
- * @apiGroup Authentication
+ * @api {post} /apiv1/authenticate Authenticate.
+ * @apiVersion 1.0.0
+ * @apiName Authenticate
+ * @apiGroup Users
+ * @apiDescription Validate username and password.
+ * @apiParam {String} email User email.
+ * @apiParam {String} clave User password.
+ * @apiParam {String} [lang] Locale.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *     "success": true,
+ *     "message": "Enjoy your token!",
+ *     "token": "XXX"
+ * }
+ *
+ * @apiError success false
+ * @apiError error Error description
+ * @apiError error.code Error code
+ * @apiError error.message Error code
+ *
+ * @apiErrorExample {json} Error-Response:
+ * {
+ *   "success": false,
+ *   "error": {
+ *       "code": 401,
+ *       "message": "Authentication failed. User not found."
+ *   }
+ * }
+ * @apiErrorExample {json} Error-Response:
+ * {
+ *   "success": false,
+ *   "error": {
+ *       "code": 401,
+ *       "message": "Authentication failed. Wrong password."
+ *   }
+ * }
  */
 router.post('/authenticate', function (req, res) {
 
-    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+    if(req.query.locale){
+        i18nVar.setLocale(req.query.locale);
+    }else{
+        i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+    }
 
     console.log('Datos de login de Usuario:' +
         '\n\temail:   %s' +
@@ -37,15 +77,15 @@ router.post('/authenticate', function (req, res) {
     // find the user
     Usuario.findOne({email: req.body.email}, function (err, user) {
         if (err) {
-            return res.status(500).json({ok: false, error: {code: 500, message: err.message}});
+            return res.status(500).json({success: false, error: {code: 500, message: err.message}});
         }
         if (!user) {
-            return res.json({ok: false, error: {code: 401, message: 'Authentication failed. User not found.'}});
+            return res.json({success: false, error: {code: 401, message: 'Authentication failed. User not found.'}});
         } else if (user) {
 
             // check if password matches
             if (user.clave != sha256(req.body.clave)) {
-                res.json({ok: false, error: {code: 401, message: 'Authentication failed. Wrong password.'}});
+                res.json({success: false, error: {code: 401, message: 'Authentication failed. Wrong password.'}});
             } else {
 
                 // if user is found and password is right
@@ -56,7 +96,7 @@ router.post('/authenticate', function (req, res) {
 
                 // return the information including token as JSON
                 res.json({
-                    ok: true,
+                    success: true,
                     message: 'Enjoy your token!',
                     token: token
                 });

@@ -9,28 +9,59 @@ var Anuncio = mongoose.model('Anuncio');
 var jwtAuth = require('../../lib/jwtAuth');
 router.use(jwtAuth());
 
-// devuelve una lista de anuncios en JSON
 /**
- * @api {get} /anuncios Lista los anuncios según los parámetros del filtro.
+ * @api {get} /apiv1/anuncios List requested ads.
+ * @apiVersion 1.0.0
  * @apiName GetAnuncios
- * @apiGroup Anuncios
+ * @apiGroup Ads
+ * @apiDescription List requested ads, using bellow filter parameters.
+ * @apiParam {String} [tag] Tags to classify.
+ * @apiParam {Boolean} [venta] ​Identify ad type; selling or searching.
+ * @apiParam {String} [nombre]​ Name to filer
+ * @apiParam {String} [precio]​ Used to specify price range, using min-max format.
+ * @apiParam {String} [start]​​ Paginate option.
+ * @apiParam {String} [limit]​ Paginate option.​
+ * @apiParam {String} [sort]​ Paginate option.
+ * @apiParam {String} [includeTotal]​​ Total ads count.
+ * @apiParam {String} [lang] Locale.
+ * @apiParam {String} token​ Registered user token.
+ *
+ *  @apiSuccessExample {json} Success-Response:
+ *  {"success":true,
+ *  "total":4,
+ *  "data":
+ *      [{"_id":"561046f403f553d2273f818d",
+ *      "nombre":"Bicicleta",
+ *      "venta":true,
+ *      "precio":230.15,
+ *      "foto":"bici.jpg",
+ *      "__v":0,
+ *      "dateCreated":"2015-10-03T21:21:56.466Z",
+ *      "tags":["lifestyle","motor"]}
+ *   }
+ *
+ * @apiError success false
+ * @apiError error Error description
+ * @apiError error.code Error code
+ * @apiError error.message Error code
+ *
+ * @apiErrorExample {json} Error-Response:
+ * {"success":false,
+ *  "error":{
+ *      "code":403,
+ *      "message":"No token provided."
+ *    }
+ *  }
+ *
+ * @apiError (7XX) success false
+ * @apiError (7XX) msg Error message
+ *
+ * @apiErrorExample {json} Error-Response:
+ * {"success":false,
+ *  "msg":"Not valid param precio."}
  */
 router.get('/', function(req, res) {
 
-    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
-/**
- anuncios?​
- tag​=mobile&
- ​venta​=false&​
- nombre​=ip&​
- precio​=50&
- ​start​=0&​
- limit​=2&​
- sort​=precio&
- ​includeTotal​=true&
- lang=es&
- ​token​=XX
- */
     var tag          = req.query.tag;
     var venta        = req.query.venta;
     var nombre       = req.query.nombre;
@@ -39,6 +70,7 @@ router.get('/', function(req, res) {
     var limit        = req.query.limit;
     var sort         = req.query.sort;
     var includeTotal = req.query.includeTotal;
+    var localeAux    = req.query.locale;
 
     console.log('Parámetros de búsqueda:' +
         '\n\ttag --> %s' +
@@ -48,7 +80,14 @@ router.get('/', function(req, res) {
         '\n\tstart --> %s' +
         '\n\tlimit --> %s' +
         '\n\tsort --> %s' +
-        '\n\tincludeTotal --> %s', tag,venta,nombre,precio,start,limit,sort,includeTotal);
+        '\n\tincludeTotal --> %s' +
+        '\n\tlocale --> %s', tag,venta,nombre,precio,start,limit,sort,includeTotal,localeAux);
+
+    if(localeAux){
+        i18nVar.setLocale(localeAux);
+    }else{
+        i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+    }
 
     var criterios = {};
 
@@ -147,52 +186,129 @@ router.get('/', function(req, res) {
     Anuncio.lista(criterios, start, limit, sort, function(err, lista) {
         if (err) {
             console.log(err);
-            return res.json({ok:false, error: err});
+            return res.json({success:false, error: err});
         }
 
-        res.json({ok:true, total:lista.length, data: lista});
+        res.json({success:true, total:lista.length, data: lista});
 
     });
 
 });
 
+
 /**
- * @api {get} /anuncios/tags Lista los tags que hay.
+ * @api {get} /apiv1/anuncios/tags List used tags.
+ * @apiVersion 1.0.0
  * @apiName GetTags
- * @apiGroup Anuncios
+ * @apiGroup Ads
+ * @apiDescription List used tags from all created ads.
+ * @apiParam {String} [lang] Locale.
+ * @apiParam {String} token Registered user token.
+ *
+ *  @apiSuccessExample {json} Success-Response:
+ *  {"success":true,
+ *      "total":3,
+ *      "data":[
+ *          "lifestyle",
+ *          "motor",
+ *          "mobile"]
+ *  }
+ *
+ * @apiError success false
+ * @apiError error Error description
+ * @apiError error.code Error code
+ * @apiError error.message Error code
+ *
+ * @apiErrorExample {json} Error-Response:
+ * {"success":false,
+ *  "error":{
+ *      "code":403,
+ *      "message":"No token provided."
+ *    }
+ *  }
  */
 router.get('/tags', function(req, res, next){
-    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+
+    if(req.query.locale){
+        i18nVar.setLocale(req.query.locale);
+    }else{
+        i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+    }
 
     Anuncio.getTags(function(err, lista){
         if (err) {
             console.log(err);
-            return res.json({ok:false, error: err});
+            return res.json({success:false, error: err});
         }
 
-        res.json({ok:true, total:lista.length, data: lista});
+        res.json({success:true, total:lista.length, data: lista});
 
     });
 });
 
 /**
- * @api {post} /anuncios Crea un anuncio.
- * @apiName PostAnuncios
- * @apiGroup Anuncios
+ * @api {post} /apiv1/anuncios Create ads.
+ * @apiVersion 1.0.0
+ * @apiName PutAnuncio
+ * @apiGroup Ads
+ * @apiDescription Create ads.
+ * @apiParam {String} [tag] Tags to classify.
+ * @apiParam {Boolean} [venta] ​Identify ad type; selling or searching.
+ * @apiParam {String} [nombre]​ Product name
+ * @apiParam {String} [precio]​ Product price.
+ * @apiParam {String} [foto]​ Product photo.
+ * @apiParam {String} [lang] Locale.
+ * @apiParam {String} token Registered user token.
+ *
+ *  @apiSuccessExample {json} Success-Response:
+ *  {"success": true,
+ *   "anuncio": {
+ *       "__v": 0,
+ *       "nombre": "iPhone 3GS YYYYY",
+ *       "venta": true,
+ *       "precio": 500,
+ *       "foto": "iphone.png",
+ *       "_id": "561192aee802c2624b2147bf",
+ *       "dateCreated": "2015-10-04T20:57:18.568Z",
+ *       "tags": [
+ *           "lifestyle",
+ *           "mobile"
+ *       ]
+ *   }
+ * }
+ *
+ * @apiError success false
+ * @apiError error Error description
+ * @apiError error.code Error code
+ * @apiError error.message Error code
+ *
+ * @apiErrorExample {json} Error-Response:
+ * {"success":false,
+ *  "error":{
+ *      "code":403,
+ *      "message":"No token provided."
+ *    }
+ *  }
  */
 router.post('/', function(req, res, next) {
 
-    // crear un registro de agente
+    if(req.query.locale){
+        i18nVar.setLocale(req.query.locale);
+    }else{
+        i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+    }
+
+    // crear un registro de anunicio
     var anuncio = new Anuncio(req.body); // {name:'Nuevo', age: 18}
 
     anuncio.save( function(err, creado) {
         if (err) {
             console.log(i18nVar.__("ADS_POST_KO") + err);
-            return res.json({ok:false, error: err});
+            return res.json({success:false, error: err});
         }
 
         // devolver una confirmación
-        res.json({ok:true, anuncio: creado});
+        res.json({success:true, anuncio: creado});
     });
 });
 

@@ -32,10 +32,50 @@ router.get('/', function (req, res) {
 });
  */
 
+
 /**
- * @api {post} /usuarios/registrar Da de alta un usuario.
- * @apiName PostUsuario
- * @apiGroup Usuarios
+ * @api {post} /apiv1/usuarios/registrar NewUser.
+ * @apiVersion 1.0.0
+ * @apiName CreateUser
+ * @apiGroup Users
+ * @apiDescription Create a new user.
+ * @apiParam {String} nombre User name.
+ * @apiParam {String} email User email.
+ * @apiParam {String} clave User password.
+ * @apiParam {String} [lang] Locale.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *    {
+ *        "success": true,
+ *        "usuario": {
+ *            "__v": 0,
+ *            "nombre": "2222",
+ *            "email": "2222@gmail.com",
+ *            "clave": "edee29f882543b956620b26d0ee0e7e950399b1c4222f5de05e06425b4c995e9",
+ *            "_id": "561196975f5e8de84b912a14",
+ *            "dateCreated": "2015-10-04T21:13:59.597Z"
+ *        }
+ *    }
+ *
+ * @apiError success false
+ * @apiError msg Error description
+ * @apiError error Error description
+ * @apiError error.code Error code
+ * @apiError error.message Error code
+ *
+ * @apiErrorExample {json} Error-Response:
+ * {
+ *   "success": false,
+ *   "error": {
+ *       "code": 401,
+ *       "message": "Authentication failed. User not found."
+ *   }
+ * }
+ * @apiErrorExample {json} Error-Response:
+ * {
+ *      "success": false,
+ *      "msg": "email already registered."
+ *  }
  */
 router.post('/registrar', function (req, res, next) {
 
@@ -44,7 +84,11 @@ router.post('/registrar', function (req, res, next) {
     var auxClave = req.body.clave;
     var auxClaveSha = sha256(auxClave);
 
-    i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+    if(req.query.locale){
+        i18nVar.setLocale(req.query.locale);
+    }else{
+        i18nVar.setLocale(Object.getOwnPropertyDescriptor(req.headers, 'accept-language').value);
+    }
 
     console.log('Datos de Usuario:' +
         '\n\tNombre:   %s' +

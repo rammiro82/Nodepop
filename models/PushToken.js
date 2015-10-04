@@ -12,8 +12,7 @@ var pushTokenSchema = mongoose.Schema({
     usuario: String
 });
 
-
-pushTokenSchema.index({'token':1});
+pushTokenSchema.index({'token':1},{ unique: true });
 
 // exportar
 var PushToken = mongoose.model('PushToken', pushTokenSchema);

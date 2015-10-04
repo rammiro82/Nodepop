@@ -1,16 +1,21 @@
 {
-  "name": "PracticaNodeJS",
+  "name": "Nodepop",
+  "description": "KeepCooding MasterBoot 2015 nodejs module project",
+  "repository": "https://github.com/rammiro82/Nodepop.git",
+  "license": "MIT",
   "version": "0.1.0",
   "private": false,
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
-    "initDB": "node init/install_bd.js"
+    "initDB": "node init/install_bd.js",
+    "apidoc": "apidoc -e node_modules -o public/doc/"
   },
   "apidoc": {
     "title": "Nodepop - RESTfull web API",
-    "url": "https://localhost:3000/apiv1"
+    "url": "https://localhost:3000/"
   },
+
   "dependencies": {
     "async": "^1.4.2",
     "body-parser": "~1.13.2",
@@ -25,5 +30,8 @@
     "serve-favicon": "~2.3.0",
     "sha256": "^0.2.0",
     "validator": "^4.0.6"
+  },
+  "devDependencies": {
+    "jshint": "^2.8.0"
   }
 }
