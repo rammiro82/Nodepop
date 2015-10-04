@@ -8,7 +8,8 @@ var bodyParser = require('body-parser');
 
 var i18n = new (require('i18n-2'))({
     // setup some locales - other locales default to the first locale
-    locales: ['es', 'en']
+    locales: ['es', 'en'],
+    defaultLocale: 'es'
 });
 // definimos de manera global la variable i18n, para poder utiliarla en cualquier lugar.
 global.i18nVar = i18n;
