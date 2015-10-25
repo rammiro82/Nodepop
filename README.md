@@ -1,5 +1,5 @@
 # Nodepop
-Repositorio del código fuente de la práctica del módulo NodeJS del KeepCoding MasterBoot 2015.
+Repositorio del código fuente de la práctica del módulo DevOps del KeepCoding MasterBoot 2015.
 
 ## Arrancar la aplicación
 
