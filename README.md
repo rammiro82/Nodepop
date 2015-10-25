@@ -24,6 +24,8 @@ Los pasos para poder probar la API usando la extensión para chrome 'Postman RES
  - Usando la URL ``http://www.nodepop.es/apiv1/anuncios?token=XXXX&tag='etiqueta'&venta=true&nombre='Descripción'&precio=125&start=0&limit=50&sort='precio'&includeTotal=&lang='es_ES'`` para listar los anuncios usando filtros
 ![Sin titulo](https://raw.githubusercontent.com/rammiro82/KeepCoding/master/Git/img_temp/03_2_consultarAuncios.png "Crear anuncios en la App")
 
+Una documentación más extensa de la API, se puede encontrar en [Nodepop API Doc](http://www.nodepop.es/doc).
+
 Para probar cómo nginx sirve los ficheros estáticos, para descargar trabajo a node, se puede probar con los siguientes enlaces:  
 
 - <http://www.nodepop.es/images/anuncios/bici.png> 
