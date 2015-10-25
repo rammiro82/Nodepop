@@ -8,7 +8,8 @@ var path = require('path');
 
 var db = mongoose.connection;
 
-mongoose.connect('mongodb://localhost/Nodepop');
+//mongoose.connect('mongodb://localhost/Nodepop');
+mongoose.connect('mongodb://172.31.35.36/Nodepop');
 
 db.once('open', function() {
 
