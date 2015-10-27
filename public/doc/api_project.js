@@ -1,1 +1,15 @@
-define({  "title": "Nodepop - RESTfull web API",  "url": "https://localhost:3000/",  "name": "PracticaNodeJS",  "version": "0.1.0",  "description": "Proyecto del módulo NodeJS del KeepCooding MasterBoot 2015",  "sampleUrl": false,  "apidoc": "0.2.0",  "generator": {    "name": "apidoc",    "time": "2015-10-04T21:31:39.378Z",    "url": "http://apidocjs.com",    "version": "0.13.1"  }});
+define({
+  "title": "Nodepop - RESTfull web API",
+  "url": "http://www.nodepop.es",
+  "name": "Nodepop",
+  "version": "0.1.1",
+  "description": "KeepCooding MasterBoot 2015 nodejs module project",
+  "sampleUrl": false,
+  "apidoc": "0.2.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2015-10-25T07:51:11.719Z",
+    "url": "http://apidocjs.com",
+    "version": "0.13.1"
+  }
+});

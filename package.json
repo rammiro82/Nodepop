@@ -3,7 +3,7 @@
   "description": "KeepCooding MasterBoot 2015 nodejs module project",
   "repository": "https://github.com/rammiro82/Nodepop.git",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "scripts": {
     "start": "node ./bin/www",
@@ -13,7 +13,7 @@
   },
   "apidoc": {
     "title": "Nodepop - RESTfull web API",
-    "url": "https://localhost:3000/"
+    "url": "http://www.nodepop.es"
   },
 
   "dependencies": {
